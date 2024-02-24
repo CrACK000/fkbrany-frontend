@@ -1,0 +1,46 @@
+<script setup lang="ts">
+import {onMounted} from "vue";
+import references from "@/plugins/references";
+import Container from "@/components/Container.vue";
+import Footer from "@/views/layout/Footer.vue";
+import ContainerGrid from "@/components/ContainerGrid.vue";
+import AuthGrid from "@/components/AuthGrid.vue";
+import AuthSideMenu from "@/components/app/AuthSideMenu.vue";
+
+onMounted(async () => {
+  await references.all()
+});
+</script>
+
+<template>
+  <Container>
+
+    <container-grid :width=7 :main-col=12>
+
+      <template #main>
+        <auth-grid>
+
+          <template #title>Admin panel</template>
+
+          <template #menu>
+            <auth-side-menu/>
+          </template>
+
+          <template #router>
+            <router-view v-slot="{ Component, route }">
+              <keep-alive>
+                <component :is="Component" :key="route.path"/>
+              </keep-alive>
+            </router-view>
+          </template>
+
+        </auth-grid>
+      </template>
+
+    </container-grid>
+
+  </Container>
+
+  <Footer/>
+
+</template>

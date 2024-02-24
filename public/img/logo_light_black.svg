@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" id="Vrstva_1" x="0px" y="0px" viewBox="0 0 70.501 39.568" style="enable-background:new 0 0 83.1 52.8;" xmlns="http://www.w3.org/2000/svg">
+  <style type="text/css">
+	.st0{fill-rule:evenodd;clip-rule:evenodd;}
+</style>
+  <g transform="matrix(1, 0, 0, 1, -6.457554, 0.696403)">
+    <path class="st0" d="M59.7,18c0-9.9-8.1-18-18-18s-18,8.1-18,18h1.2c0-9.3,7.5-16.8,16.8-16.8S58.5,8.7,58.5,18H59.7z"/>
+    <path class="st0" d="M57.3,18c0-3.8-1.3-7.3-3.6-10v2c1.5,2.3,2.4,5,2.4,8H57.3z M52.5,6.7c-1.1-1-2.3-1.9-3.6-2.6v1.4 c1.4,0.8,2.6,1.8,3.6,2.9V6.7z M47.7,3.6c-1.1-0.5-2.3-0.8-3.6-1v1.2c1.3,0.2,2.5,0.6,3.6,1.1V3.6z M42.9,2.5c-0.4,0-0.8,0-1.2,0 s-0.8,0-1.2,0v1.2c0.4,0,0.8-0.1,1.2-0.1s0.8,0,1.2,0.1V2.5z M39.3,2.6c-1.3,0.2-2.5,0.5-3.6,1v1.3C36.8,4.4,38,4,39.3,3.8V2.6z M34.5,4.2c-1.3,0.7-2.5,1.6-3.6,2.6v1.7c1-1.2,2.2-2.2,3.6-2.9V4.2z M29.7,8c-2.3,2.7-3.6,6.2-3.6,10h1.2c0-2.9,0.9-5.7,2.4-8V8z"/>
+    <rect x="23.7" y="18" class="st0" width="1.2" height="16.8"/>
+    <polygon class="st0" points="21.3,24 22.5,22.8 22.5,34.8 21.3,34.8 &#9;"/>
+    <polygon class="st0" points="60.9,22.8 62.1,24 62.1,34.8 60.9,34.8 &#9;"/>
+    <rect x="23.7" y="34.8" class="st0" width="3.6" height="1.2"/>
+    <rect x="6.9" y="34.8" class="st0" width="15.6" height="1.2"/>
+    <rect x="60.9" y="34.8" class="st0" width="15.6" height="1.2"/>
+    <rect x="6.9" y="37.2" class="st0" width="69.6" height="1.2"/>
+    <rect x="26.1" y="18" class="st0" width="1.2" height="16.8"/>
+    <path class="st0" d="M28.5,12v24h1.2V7.9C29.1,9.2,28.7,10.6,28.5,12z"/>
+    <path class="st0" d="M30.9,8.1V36h1.2V6.6C31.6,7.1,31.3,7.6,30.9,8.1z"/>
+    <path class="st0" d="M33.3,5.8V36h1.2V5C34.1,5.2,33.7,5.5,33.3,5.8z"/>
+    <path class="st0" d="M35.7,4.3V36h1.2V3.8C36.5,4,36.1,4.1,35.7,4.3z"/>
+    <path class="st0" d="M38.1,3.5V36h1.2V3.2C38.9,3.3,38.5,3.3,38.1,3.5z"/>
+    <path class="st0" d="M44.1,3.2V36h1.2V3.5C44.9,3.3,44.5,3.3,44.1,3.2z"/>
+    <path class="st0" d="M46.5,4.1V36h1.2V4.6C47.3,4.4,46.9,4.2,46.5,4.1z"/>
+    <path class="st0" d="M48.9,5.2V36h1.2v-30C49.7,5.8,49.3,5.5,48.9,5.2z"/>
+    <path class="st0" d="M51.3,6.4V36h1.2V7.8C52.1,7.3,51.7,6.8,51.3,6.4z"/>
+    <path class="st0" d="M53.7,8.6V36h1.2V12.3C54.7,10.8,54.3,9.9,53.7,8.6z"/>
+    <rect x="56.1" y="18" class="st0" width="1.2" height="16.8"/>
+    <rect x="56.1" y="34.8" class="st0" width="3.6" height="1.2"/>
+    <rect x="51.3" y="34.8" class="st0" width="3.6" height="1.2"/>
+    <rect x="46.5" y="34.8" class="st0" width="3.6" height="1.2"/>
+    <rect x="33.3" y="34.8" class="st0" width="3.6" height="1.2"/>
+    <rect x="28.5" y="34.8" class="st0" width="3.6" height="1.2"/>
+    <rect x="41.9" y="34.8" class="st0" width="3.4" height="1.2"/>
+    <rect x="38.1" y="34.8" class="st0" width="3.4" height="1.2"/>
+    <rect x="58.5" y="18" class="st0" width="1.2" height="16.8"/>
+    <rect x="40.5" y="3.4" class="st0" width="1" height="32.6"/>
+    <rect x="41.9" y="3.4" class="st0" width="1" height="32.6"/>
+  </g>
+</svg>
