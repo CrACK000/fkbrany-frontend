@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {FwbButton, FwbInput, FwbSelect, FwbTextarea} from "flowbite-vue";
 import Footer from "@/views/layout/Footer.vue";
-import {reactive, ref} from "vue";
+import {ref} from "vue";
 import axios from "axios";
 import {useMeta} from "vue-meta";
 import Container from "@/components/Container.vue";
@@ -228,7 +228,7 @@ const prevButton = () => {
       </template>
     </container-header>
 
-    <container-grid :width=4 :main-col=12 >
+    <container-grid width='4' main-col='12' :side="false">
 
       <template #main>
         <div class="fk__form-card">

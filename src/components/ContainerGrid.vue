@@ -1,30 +1,38 @@
 <script setup lang="ts">
 defineProps({
   width: {
-    type: [Number, String],
-    default: 6
+    type: String,
+    default: '6'
+  },
+  side: {
+    type: Boolean,
+    default: true
   },
   sideCol: {
-    type: Number,
-    default: 4
+    type: String,
+    default: '4'
   },
   mainCol: {
-    type: Number,
-    default: 8
+    type: String,
+    default: '8'
   }
 })
 </script>
 
 <template>
-  <div :class="`max-w-${width.toString()}xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-20`">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-20" :class="`max-w-${width}xl mx-auto`">
 
-    <div v-if="$slots.side" :class="`lg:col-span-${sideCol.toString()}`">
-      <slot name="side"></slot>
-    </div>
+    <template v-if="side">
+      <div :class="`lg:col-span-${sideCol}`">
+        <slot name="side"></slot>
+      </div>
+    </template>
 
-    <div :class="`lg:col-span-${mainCol.toString()} dark`">
-      <slot name="main"></slot>
-    </div>
+    <template v-if="$slots.main">
+      <div :class="`lg:col-span-${mainCol} dark`">
+        <slot name="main"></slot>
+      </div>
+    </template>
 
   </div>
 </template>
