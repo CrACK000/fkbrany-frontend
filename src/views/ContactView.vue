@@ -112,8 +112,8 @@ const getError = (search: any) => {
     </container-header>
 
     <container-grid>
-      <template #side>
 
+      <div class="lg:col-span-4">
         <div class="text-2xl font-semibold py-3 text-gray-300">FK brány s. r. o.</div>
         <ul class="flex flex-col divide-y divide-gray-800 my-6">
           <li class="flex gap-2 items-center py-3">
@@ -145,11 +145,9 @@ const getError = (search: any) => {
             </a>
           </div>
         </div>
+      </div>
 
-      </template>
-
-      <template #main>
-
+      <div class="lg:col-span-8">
         <div class="fk__form-card">
           <panel-form :submit="sendForm" :keyup="checkForm">
             <panel-item>
@@ -194,8 +192,8 @@ const getError = (search: any) => {
             </panel-item>
           </panel-form>
         </div>
+      </div>
 
-      </template>
     </container-grid>
 
   </Container>

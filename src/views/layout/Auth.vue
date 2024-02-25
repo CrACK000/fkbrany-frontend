@@ -15,9 +15,9 @@ onMounted(async () => {
 <template>
   <Container>
 
-    <container-grid :width=7 :main-col=12>
+    <container-grid width="7xl">
 
-      <template #main>
+      <div class="lg:col-span-12">
         <auth-grid>
 
           <template #title>Admin panel</template>
@@ -35,7 +35,7 @@ onMounted(async () => {
           </template>
 
         </auth-grid>
-      </template>
+      </div>
 
     </container-grid>
 

@@ -228,9 +228,9 @@ const prevButton = () => {
       </template>
     </container-header>
 
-    <container-grid width='4' main-col='12' :side="false">
+    <container-grid width="4xl">
 
-      <template #main>
+      <div class="lg:col-span-12">
         <div class="fk__form-card">
 
           <panel>
@@ -499,7 +499,7 @@ const prevButton = () => {
           </panel>
 
         </div>
-      </template>
+      </div>
 
     </container-grid>
 

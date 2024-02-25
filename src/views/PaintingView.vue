@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useMeta } from 'vue-meta'
 import Footer from "@/views/layout/Footer.vue";
-import Header from "@/components/Header.vue";
 import Container from "@/components/Container.vue";
 import ContainerHeader from "@/components/ContainerHeader.vue";
 import ContainerGrid from "@/components/ContainerGrid.vue";
@@ -21,9 +20,9 @@ useMeta({ title: 'Práškové lakovanie AA lak' });
       </template>
     </container-header>
 
-    <container-grid width="full" :main-col=12>
+    <container-grid width="full">
 
-      <template #main>
+      <div class="lg:col-span-12">
         <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-8">
           <a href="https://www.facebook.com/AA-lak-Nitra-105147118461395/" target="_blank" class="bg-transparent truncate py-4 px-5 border border-gray-500/30 hover:border-gray-500/50 text-gray-500 hover:text-gray-400 rounded-3xl flex items-center gap-4 text-lg transition">
             <i class="fa-brands fa-square-facebook text-3xl"></i>
@@ -45,7 +44,7 @@ useMeta({ title: 'Práškové lakovanie AA lak' });
             </span>
           </a>
         </div>
-      </template>
+      </div>
 
     </container-grid>
 

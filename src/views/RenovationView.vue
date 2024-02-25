@@ -154,11 +154,11 @@ const getError = (search: any) => {
 
     <container-grid>
 
-      <template #side>
+      <div class="lg:col-span-4">
         <images-before-after/>
-      </template>
+      </div>
 
-      <template #main>
+      <div class="lg:col-span-8">
         <div class="fk__form-card">
           <panel-form :submit="sendForm" :keyup="checkForm">
             <panel-item>
@@ -234,7 +234,7 @@ const getError = (search: any) => {
             </panel-item>
           </panel-form>
         </div>
-      </template>
+      </div>
 
     </container-grid>
 
