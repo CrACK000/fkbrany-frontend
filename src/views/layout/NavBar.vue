@@ -95,7 +95,7 @@ const secondHalfLinks = computed(() => navbarLinks.slice(navbarLinks.length / 2)
 
                     </div>
                     <div class="py-8 xxs:py-10 md:py-12 px-2 xs:px-6 md:px-12">
-                      <div class="flex flex-col divide-y divide-gray-200">
+                      <div class="flex flex-col divide-y divide-gray-200/75 text-black">
                         <router-link v-for="link in navbarLinks" @click="sidebar = false" :to="link.to" class="py-4 px-5">
                           {{ link.title }}
                         </router-link>

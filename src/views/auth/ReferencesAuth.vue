@@ -39,14 +39,14 @@ onMounted(async () => {
 
     <div class="flex flex-col gap-y-3">
 
-      <div v-if="!references.data.referencesLoading" v-for="reference in referencesLoaded" class="grid grid-cols-12 gap-4 bg-black/15 lg:bg-black/0 lg:hover:bg-black/15 lg:scale-100 lg:hover:scale-105 p-3 rounded-xl transition">
+      <div v-if="!references.data.referencesLoading" v-for="reference in referencesLoaded" class="grid grid-cols-12 gap-4 bg-black/15 lg:bg-black/0 lg:hover:bg-black/15 lg:scale-100 lg:hover:scale-105 p-3 rounded-lg xs:rounded-xl md:rounded-2xl lg:rounded-3xl xl:rounded-[2rem] transition">
 
         <div class="col-span-12 md:col-span-4 self-center aspect-video">
 
           <image-loading
             v-if="reference.gallery.length"
             :src="`${backend}/image/${(reference.gallery.find(img => img.main) || reference.gallery[0]).path}`"
-            img-class="rounded-lg max-w-full max-h-full mx-auto"
+            img-class="rounded-md xs:rounded-lg md:rounded-xl lg:rounded-2xl xl:rounded-3xl max-w-full max-h-full mx-auto"
             :alt="reference.title"
           >
             <template #skeleton>
@@ -61,7 +61,7 @@ onMounted(async () => {
         <div class="col-span-12 md:col-span-8 flex flex-col justify-between gap-y-3">
           <div class="flex justify-between">
             <div>
-              <div class="text-lg md:text-xl truncate">{{ reference.title }}</div>
+              <div class="text-lg md:text-xl max-w-full line-clamp-1">{{ reference.title }} asda sdasd asd</div>
               <div class="line-clamp-2 text-sm mt-1 md:mt-2 opacity-75 max-w-md">{{ reference.description }}</div>
             </div>
             <div class="hidden md:block">

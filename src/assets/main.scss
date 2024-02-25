@@ -103,7 +103,8 @@ body::-webkit-scrollbar-thumb {
   @apply
   bg-gray-800/50
   backdrop-blur-xl
-  rounded-2xl
+  sm:rounded-2xl
+  -mx-4 xxs:-mx-6 xs:-mx-8 md:-mx-0
   shadow-xl
 }
 

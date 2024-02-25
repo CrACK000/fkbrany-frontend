@@ -38,12 +38,12 @@ onMounted(async () => {
             v-if="!references.data.referencesLoading"
             :to="{ name: 'reference', params: { id: reference._id } }"
             v-for="reference in references_list"
-            class="relative aspect-video group transition z-10 hover:z-50 opacity-90 hover:opacity-100">
+            class="relative aspect-video group transition z-10 hover:z-50 lg:opacity-90 lg:hover:opacity-100">
 
             <image-loading
               v-if="reference.gallery.length"
               :src="`${backend}/image/${(reference.gallery.find(img => img.main) || reference.gallery[0]).path}`"
-              img-class="w-full h-full scale-100 group-hover:scale-110 group-hover:shadow-xl transition"
+              img-class="w-full h-full lg:scale-100 lg:group-hover:scale-110 lg:group-hover:shadow-xl transition"
               :alt="reference.title">
               <template #skeleton>
                 <skeleton-latest-references :rows=1 />
@@ -52,8 +52,8 @@ onMounted(async () => {
 
             <latest-references-no-gallery v-else />
 
-            <div class="absolute inset-0 opacity-0 group-hover:opacity-100 scale-100 group-hover:scale-110 transition">
-              <div class="text-gray-200 line-clamp-2 bg-gray-700/30 backdrop-blur-lg shadow-xl p-3 rounded">
+            <div class="absolute inset-0 lg:opacity-0 lg:group-hover:opacity-100 lg:scale-100 lg:group-hover:scale-110 transition">
+              <div class="text-gray-200 line-clamp-2 bg-gray-700/30 backdrop-blur-lg shadow-xl p-3">
                 {{reference.title}}
               </div>
             </div>
