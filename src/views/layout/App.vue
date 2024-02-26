@@ -2,7 +2,6 @@
 import NavBar from "@/views/layout/NavBar.vue";
 import {inject, onMounted} from "vue";
 import LoadingScreen from "@/components/LoadingScreen.vue";
-import {FwbToast} from "flowbite-vue";
 import references from "@/plugins/references";
 
 const auth = inject<any>('auth')
@@ -22,7 +21,7 @@ onMounted(async () => {
   <NavBar />
 
   <RouterView v-slot="{ Component }">
-    <keep-alive include="HomeView,ReferencesView">
+    <keep-alive include="HomeView,ReferencesView" exclude="ImageLoading">
       <component :is="loading ? LoadingScreen : Component"/>
     </keep-alive>
   </RouterView>

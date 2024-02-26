@@ -5,26 +5,22 @@
   <img v-show="!loading" :src="src" @load="onImageLoaded" :class="imgClass" :alt="alt">
 </template>
 
-<script lang="ts">
-import { ref } from 'vue';
+<script setup lang="ts">
+import { onMounted, ref } from 'vue';
 
-export default {
-  props: {
-    src: String,
-    alt: String,
-    imgClass: String,
-  },
-  setup(props) {
-    const loading = ref(true);
+defineProps({
+  src: String,
+  alt: String,
+  imgClass: String,
+})
 
-    const onImageLoaded = () => {
-      loading.value = false;
-    }
+const loading = ref(false);
 
-    return {
-      loading,
-      onImageLoaded
-    };
-  }
+const onImageLoaded = () => {
+  loading.value = false;
 }
+
+onMounted(() => {
+  loading.value = true;
+})
 </script>

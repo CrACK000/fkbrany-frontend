@@ -56,6 +56,11 @@ interface ReferencesData {
   referenceLoading: boolean;
 }
 
+interface Settings {
+  _id: string;
+  receiving_email: string;
+}
+
 interface User {
   _id: string;
   username: string;

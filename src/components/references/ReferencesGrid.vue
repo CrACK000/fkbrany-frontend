@@ -21,7 +21,7 @@ const backend = ref(import.meta.env.VITE_BACKEND);
       <div>
         <image-loading
           v-if="reference.gallery.length"
-          :src="`${backend}/image/${(reference.gallery.find(img => img.main) || reference.gallery[0]).path}`"
+          :src="`${backend}/image/${(reference.gallery.find(img => img.main) || reference.gallery[0]).path}/640x360`"
           img-class="w-full z-10 rounded-lg xs:rounded-xl sm:rounded-2xl shadow-xl shadow-black/25"
           :alt="reference.title"
         >

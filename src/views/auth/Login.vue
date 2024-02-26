@@ -4,7 +4,6 @@ import axios from "axios";
 import {inject, ref} from "vue";
 import router from "@/router";
 import {useMeta} from "vue-meta";
-import Container from "@/components/Container.vue";
 import Header from "@/components/Header.vue";
 
 useMeta({ title: "Login" })
@@ -12,8 +11,8 @@ useMeta({ title: "Login" })
 const auth = inject<any>('auth');
 
 const form = ref<any>({
-  username: 'crack',
-  password: '',
+  username: '' as string,
+  password: '' as string,
 });
 
 const loading = ref<boolean>(false);

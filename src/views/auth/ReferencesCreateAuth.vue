@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {useMeta} from "vue-meta";
-import {FwbButton, FwbFileInput, FwbInput, FwbTextarea} from "flowbite-vue";
+import {FwbButton, FwbInput, FwbTextarea} from "flowbite-vue";
 import {ref} from "vue";
 import axios from "axios";
 import router from "@/router";
@@ -10,7 +10,7 @@ import PanelItem from "@/components/PanelItem.vue";
 
 useMeta({ title: "Vytvoriť referenciu" })
 
-const max_files = ref<number>(4)
+const max_files = ref<number>(8)
 const imagesPreview = ref<any>([])
 
 const form = ref<any>({

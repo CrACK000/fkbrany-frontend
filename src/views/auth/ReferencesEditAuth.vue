@@ -1,6 +1,6 @@
 <script setup lang="ts" xmlns="http://www.w3.org/1999/html">
 import {useMeta} from "vue-meta";
-import {FwbBadge, FwbButton, FwbInput, FwbTextarea} from "flowbite-vue";
+import {FwbBadge, FwbButton, FwbInput, FwbSpinner, FwbTextarea} from "flowbite-vue";
 import {onMounted, ref} from "vue";
 import axios from "axios";
 import references from "@/plugins/references";
@@ -10,6 +10,7 @@ import Spinner from "@/components/Spinner.vue";
 import SkeletonAuthReferenceEditGalleryLoadingImage from "@/components/skeleton/auth/SkeletonGalleryLoadingImage.vue";
 import PanelForm from "@/components/PanelForm.vue";
 import PanelItem from "@/components/PanelItem.vue";
+import router from "@/router";
 
 useMeta({ title: `Upraviť referenciu` })
 
@@ -27,10 +28,12 @@ const form = ref<any>({
 
 const _id = ref<string>(String(route.params.id))
 const backend = ref(import.meta.env.VITE_BACKEND);
-const max_files = ref<number>(6)
+const max_files = ref<number>(8)
 
 const loading = ref<boolean>(false)
-const remove_loading = ref<boolean>(false)
+const remove_loading = ref<number | null>(null)
+const setMain_loading = ref<number | null>(null)
+const removing_reference = ref<boolean>(false)
 const errors = ref<any>([])
 const success = ref<boolean>(false)
 const success_message = ref<string>('')
@@ -133,7 +136,7 @@ function editReference() {
 
 function deleteImage(index: number) {
 
-  remove_loading.value = true
+  remove_loading.value = index
 
   const removeImageData = {
     id: String(_id.value),
@@ -176,19 +179,102 @@ function deleteImage(index: number) {
     })
     .finally(() => {
 
-      remove_loading.value = false
+      remove_loading.value = null
 
     })
 }
 
 function setMainImage(index: number) {
 
+  setMain_loading.value = index
 
+  const mainImageData = {
+    id: String(_id.value),
+    key: String(index)
+  }
 
+  axios.post(`${import.meta.env.VITE_BACKEND}/references/edit/${_id.value}/image`, mainImageData, { withCredentials: true })
+    .then(response => {
+
+      if (response.data.success) {
+
+        form.value.gallery = response.data.gallery;
+
+        references.data.references = references.data.references.map((reference) => {
+
+          if(reference._id === _id.value) {
+
+            reference.gallery = response.data.gallery;
+
+          }
+
+          return reference;
+
+        });
+
+        success.value = true
+        success_message.value = response.data.message
+
+      } else {
+
+        errors.value.push({ where: "main", message: response.data.message })
+
+      }
+
+    })
+    .catch(error => {
+
+      errors.value.push({ where: "main", message: "Server neodpovedá. Skúste to neskôr." })
+
+    })
+    .finally(() => {
+
+      setMain_loading.value = null
+
+    })
 }
 
 function removeReference() {
 
+  removing_reference.value = true
+
+  const removeData = { id: String(_id.value) }
+
+  axios.post(`${import.meta.env.VITE_BACKEND}/references/remove/${_id.value}`, removeData, { withCredentials: true })
+    .then(response => {
+
+      if (response.data.success) {
+
+        references.data.references = references.data.references.filter((reference) => {
+
+          return reference._id !== _id.value;
+
+        })
+
+        success.value = true
+        success_message.value = response.data.message
+
+        setTimeout(() => {
+          router.push({ name: 'references-all' })
+        }, 1000)
+
+      } else {
+
+        errors.value.push({ where: "main", message: response.data.message })
+
+      }
+
+    })
+    .catch(error => {
+
+      errors.value.push({ where: "main", message: "Server neodpovedá. Skúste to neskôr." })
+
+    })
+    .finally(() => {
+
+      removing_reference.value = false
+
+    })
 
 
 }
@@ -256,7 +342,7 @@ onMounted(async () => {
           <div v-for="(img, key) in form.gallery" class="flex items-center justify-center aspect-video p-1.5 bg-gray-800 rounded-xl group relative" :key="key">
 
             <image-loading
-              :src="`${backend}/image/${img.path}`"
+              :src="`${backend}/image/${img.path}/426x240`"
               :alt="`Gallery img ${key}`"
               img-class="max-w-full max-h-full rounded-lg"
             >
@@ -265,18 +351,24 @@ onMounted(async () => {
               </template>
             </image-loading>
 
-            <div class="absolute top-0 left-0 m-2">
+            <div class="absolute top-0 left-0 m-2" v-if="remove_loading === null">
               <fwb-badge v-if="img.main">Main</fwb-badge>
-              <fwb-button type="button" @click="setMainImage(key)" v-else color="alternative" size="xs" class="md:hidden md:group-hover:block">
-                Hlavný
-              </fwb-button>
+              <div v-else>
+                <fwb-spinner v-if="setMain_loading === key" size="5"/>
+                <fwb-button v-else type="button" @click="setMainImage(key)" color="alternative" size="xs" class="md:opacity-0 md:group-hover:opacity-100 transition">
+                  Hlavný
+                </fwb-button>
+              </div>
             </div>
 
-            <button type="button" @click="deleteImage(key)" class="absolute bg-gray-800/15 backdrop-blur-lg p-0.5 top-0 right-0 m-2 hover:bg-red-500 hover:text-white hover:shadow rounded-md transition">
-              <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 18 6m0 12L6 6"/>
-              </svg>
-            </button>
+            <div class="absolute top-0 right-0 m-2">
+              <fwb-spinner v-if="remove_loading === key" color="red" size="5"/>
+              <button v-else type="button" @click="deleteImage(key)" class="bg-gray-800/15 backdrop-blur-lg p-0.5 hover:bg-red-500 hover:text-white hover:shadow rounded-md transition">
+                <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 18 6m0 12L6 6"/>
+                </svg>
+              </button>
+            </div>
 
           </div>
 
@@ -312,7 +404,13 @@ onMounted(async () => {
       <div :class="{'opacity-40 block-screen': references.data.referenceLoading }">
         <div class="block mb-4 text-sm font-medium text-white">Nastavenia referencie</div>
 
-        <fwb-button type="button" @click="removeReference" color="red">Odstrániť referenciu</fwb-button>
+        <div class="flex gap-x-3 items-center">
+          <fwb-button type="button" @click="removeReference" :disabled="removing_reference" color="red">Odstrániť referenciu</fwb-button>
+          <div v-if="removing_reference" class="flex items-center gap-x-2 text-red-500 text-sm">
+            <fwb-spinner color="red"/>
+            Odstraňuje sa...
+          </div>
+        </div>
         <div class="mt-2 text-sm text-red-500">
           Všetky informácie a galéria referencie budú odstránené. Táto akcia sa nedá vrátiť späť.
         </div>

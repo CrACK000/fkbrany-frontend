@@ -1,13 +1,10 @@
 <script setup lang='ts'>
 import {ref, onMounted, computed, watch, defineComponent} from 'vue';
-import axios from 'axios';
 import Footer from "@/views/layout/Footer.vue";
 import {FwbCarousel} from "flowbite-vue";
 import { useRoute } from 'vue-router';
-import { useMeta } from 'vue-meta';
 import SkeletonReference from "@/components/skeleton/references/SkeletonReference.vue";
 import references from "@/plugins/references";
-import Header from "@/components/Header.vue";
 import Container from "@/components/Container.vue";
 
 defineComponent({
@@ -26,7 +23,7 @@ const reference = ref({} as Reference);
 const gallery = ref<Image[]>([]);
 
 const transformedGallery = computed(() => gallery.value.map(item => ({
-  src: `${import.meta.env.VITE_BACKEND}/image/${item.path}`,
+  src: `${import.meta.env.VITE_BACKEND}/image/${item.path}/1280x720`,
   alt: reference.value.title,
 })));
 

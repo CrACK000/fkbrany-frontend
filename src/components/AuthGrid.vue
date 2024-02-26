@@ -13,7 +13,7 @@
 
     <slot name="menu"/>
 
-    <div class="lg:col-span-2 bg-gray-800/50 backdrop-blur-xl rounded-b-2xl lg:rounded-t-2xl shadow-xl border-t border-gray-800 lg:border-0">
+    <div class="lg:col-span-2 bg-gray-800/50 backdrop-blur-xl rounded-b-2xl lg:rounded-t-2xl shadow-xl border-t border-gray-800 lg:border-0 overflow-hidden">
 
       <slot name="router"/>
 

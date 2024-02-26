@@ -42,7 +42,7 @@ onMounted(async () => {
 
             <image-loading
               v-if="reference.gallery.length"
-              :src="`${backend}/image/${(reference.gallery.find(img => img.main) || reference.gallery[0]).path}`"
+              :src="`${backend}/image/${(reference.gallery.find(img => img.main) || reference.gallery[0]).path}/640x360`"
               img-class="w-full h-full lg:scale-100 lg:group-hover:scale-110 lg:group-hover:shadow-xl transition"
               :alt="reference.title">
               <template #skeleton>

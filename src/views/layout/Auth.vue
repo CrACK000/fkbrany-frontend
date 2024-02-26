@@ -28,7 +28,7 @@ onMounted(async () => {
 
           <template #router>
             <router-view v-slot="{ Component, route }">
-              <keep-alive>
+              <keep-alive exclude="ImageLoading,ReferencesCreateAuth,ReferencesEditAuth,Settings">
                 <component :is="Component" :key="route.path"/>
               </keep-alive>
             </router-view>
