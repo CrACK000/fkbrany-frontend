@@ -59,8 +59,8 @@ const steps = ref<any>({
 
 const styleGate = ref([
   { value: "Ťahokov", name: "Ťahokov" },
-  { value: "Lamely (hliníkové)", name: "Lamely (hliníkové)" },
-  { value: "Lamely (pozinkované)", name: "Lamely (pozinkované)" },
+  { value: "Šikmé lamely (hliníkové)", name: "Šikmé lamely (hliníkové)" },
+  { value: "Šikmé lamely (pozinkované)", name: "Šikmé lamely (pozinkované)" },
   { value: "Ploché lamely (hliníkové)", name: "Ploché lamely (hliníkové)" },
   { value: "Ploché lamely (pozinkované)", name: "Ploché lamely (pozinkované)" },
   { value: "3D Plech", name: "3D Plech" },
