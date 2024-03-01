@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {FwbButton, FwbInput, FwbSelect, FwbTextarea} from "flowbite-vue";
+import {FwbButton, FwbInput, FwbSelect, FwbTextarea, FwbToggle} from "flowbite-vue";
 import Footer from "@/views/layout/Footer.vue";
 import {ref} from "vue";
 import axios from "axios";
@@ -13,22 +13,30 @@ import ContainerGrid from "@/components/ContainerGrid.vue";
 useMeta({title: 'Žiadosť o nacenenie brány'});
 
 const form = ref<Offer>({
-  name: '' as string,
-  surname: '' as string,
-  email: '' as string,
-  mobile: '' as string,
-  gate: '' as string,
-  styleGate: '' as string,
-  widthGate: '' as string,
-  heightGate: '' as string,
-  entryGate: false as boolean,
-  widthEntryGate: '' as string,
-  heightEntryGate: '' as string,
-  montage: false as boolean,
-  montagePlace: '' as string,
-  motor: false as boolean,
-  msg: '' as string,
+  name: '',
+  surname: '',
+  email: '',
+  mobile: '',
+  gate: '',
+  styleGate: '',
+  widthGate: '',
+  heightGate: '',
+  entryGate: false,
+  widthEntryGate: '',
+  heightEntryGate: '',
+  montage: false,
+  montagePlace: '',
+  fenceParts: false,
+  fencePartsList: [],
+  motor: false,
+  msg: '',
 })
+const fencePartsForm = ref<FenceParts>({
+  count: 0,
+  width: '',
+  height: '',
+})
+
 const step = ref<number>(1)
 const steps = ref<any>({
   1: {
@@ -65,6 +73,8 @@ const success = ref<boolean>(false)
 const fail = ref<boolean>(false)
 const status = ref<string>('')
 
+const options = Array.from({length: 20}, (_, i) => ({name: i + 1, value: i + 1}));
+
 const sendOffer = () => {
 
   fail.value = false
@@ -91,7 +101,6 @@ const sendOffer = () => {
       loading.value = false
   })
 }
-
 const formCheck = () => {
   errors.value = [];
 
@@ -115,6 +124,7 @@ const formCheck = () => {
   if (step.value === 3) {
     validEntryGate()
     validMontage()
+    validFenceParts()
   }
 
   // Check step Four
@@ -123,6 +133,38 @@ const formCheck = () => {
   }
 
   if(!errors.value.length) return true;
+}
+
+function checkFencePartsForm() {
+
+  errors.value = errors.value.filter((error: any) => error.where !== 'fencePartsCount');
+  errors.value = errors.value.filter((error: any) => error.where !== 'fencePartsWidth');
+  errors.value = errors.value.filter((error: any) => error.where !== 'fencePartsHeight');
+
+  if (fencePartsForm.value.count === 0) errors.value.push({ where: 'fencePartsCount', message: 'Vyberte počet plotových dielcov.' })
+  if (!fencePartsForm.value.width) errors.value.push({ where: 'fencePartsWidth', message: 'Zadajte šírku otvoru pre plotový dielec.' })
+  if (!fencePartsForm.value.height) errors.value.push({ where: 'fencePartsHeight', message: 'Zadajte výšku otvoru pre plotový dielec.' })
+
+  if(!errors.value.length) return true;
+
+}
+function addFenceParts() {
+
+  if (!checkFencePartsForm()) return false
+
+  form.value.fencePartsList.push({
+    count: fencePartsForm.value.count,
+    width: fencePartsForm.value.width,
+    height: fencePartsForm.value.height,
+  })
+
+  fencePartsForm.value.count = 0;
+  fencePartsForm.value.width = '';
+  fencePartsForm.value.height = '';
+
+}
+function removeFenceParts(key: number) {
+  form.value.fencePartsList.splice(key, 1)
 }
 
 const validName = () => {
@@ -195,6 +237,12 @@ const validMontage = () => {
     }
   }
 }
+const validFenceParts = () => {
+  errors.value = errors.value.filter((error: any) => error.where !== 'fenceParts');
+  if (form.value.fenceParts) {
+    if (!form.value.fencePartsList.length) errors.value.push({ where: "fenceParts", message: "Pridajte rozmery a počty plotových dielcov." });
+  }
+}
 const validMessage = () => {
   errors.value = errors.value.filter((error: any) => error.where !== 'msg');
   if (!form.value.msg) {
@@ -206,7 +254,6 @@ const getError = (search: any) => {
   const emailError = errors.value.find((error: any) => error.where === search);
   return emailError ? emailError.message : '';
 }
-
 const nextButton = async () => {
   fail.value = false
   if (!formCheck()) return false
@@ -350,15 +397,12 @@ const prevButton = () => {
 
                 <div class="flex flex-col gap-6 md:p-6">
                   <div class="shadow rounded-lg overflow-hidden">
-                    <button type="button" @click="form.entryGate = !form.entryGate" class="bg-gray-800 px-6 py-5 w-full"  :class="{ 'border-b border-gray-700': form.entryGate }">
+                    <div class="bg-gray-800 px-6 py-5 w-full" :class="{ 'border-b border-gray-700': form.entryGate }">
                       <div class="flex items-center">
                         Vstupná bránka
-                        <div class="ms-auto text-xl">
-                          <span v-if="form.entryGate"><i class="fa-solid fa-toggle-on text-blue-500"></i></span>
-                          <span v-else><i class="fa-solid fa-toggle-off text-gray-400"></i></span>
-                        </div>
+                        <fwb-toggle v-model="form.entryGate" class="ms-auto"/>
                       </div>
-                    </button>
+                    </div>
                     <div v-if="form.entryGate" class="bg-gray-800 p-4 md:p-8">
                       <div class="text-sm mb-4">Rozmery vstupnej bránky</div>
                       <div class="grid grid-cols-2 gap-4">
@@ -372,15 +416,12 @@ const prevButton = () => {
                     </div>
                   </div>
                   <div class="shadow rounded-lg overflow-hidden">
-                    <button type="button" @click="form.montage = !form.montage" class="bg-gray-800 px-6 py-5 w-full" :class="{ 'border-b border-gray-700': form.montage }">
+                    <div class="bg-gray-800 px-6 py-5 w-full" :class="{ 'border-b border-gray-700': form.montage }">
                       <div class="flex items-center">
                         Montáž brány
-                        <div class="ms-auto text-xl">
-                          <span v-if="form.montage"><i class="fa-solid fa-toggle-on text-blue-500"></i></span>
-                          <span v-else><i class="fa-solid fa-toggle-off text-gray-400"></i></span>
-                        </div>
+                        <fwb-toggle v-model="form.montage" class="ms-auto"/>
                       </div>
-                    </button>
+                    </div>
                     <div v-if="form.montage" class="bg-gray-800 p-4 md:p-8">
                       <fwb-input label="Miesto montáže" :validation-status="getError('montagePlace') && 'error'" size="lg" v-model="form.montagePlace" @keyup="validMontage">
                         <template #validationMessage>{{ getError('montagePlace') }}</template>
@@ -388,13 +429,66 @@ const prevButton = () => {
                     </div>
                   </div>
                   <div class="shadow rounded-lg overflow-hidden">
-                    <div @click="form.motor = !form.motor" class="bg-gray-800 px-6 py-5 cursor-pointer user-select-none">
+                    <div class="bg-gray-800 px-6 py-5 w-full" :class="{ 'border-b border-gray-700': form.fenceParts }">
+                      <div class="flex items-center">
+                        Plotové dielce
+                        <fwb-toggle v-model="form.fenceParts" class="ms-auto"/>
+                      </div>
+                    </div>
+                    <div v-if="form.fenceParts" class="bg-gray-800 p-4 md:p-8">
+
+                      <div class="grid grid-cols-4 md:grid-cols-7 items-end gap-4 p-4 rounded-xl border border-gray-700 mb-6">
+                        <div class="col-span-4 md:col-span-2">
+                          <fwb-select v-model="fencePartsForm.count" :validation-status="getError('fencePartsCount') && 'error'" @change="checkFencePartsForm" label="Počet dielcov" :options="options" placeholder="Vyberte počet"/>
+                        </div>
+                        <div class="col-span-2 md:col-span-2">
+                          <fwb-input v-model="fencePartsForm.width" :validation-status="getError('fencePartsWidth') && 'error'" @keyup="checkFencePartsForm" label="Šírka otvoru" placeholder="mm"></fwb-input>
+                        </div>
+                        <div class="col-span-2 md:col-span-2">
+                          <fwb-input v-model="fencePartsForm.height" :validation-status="getError('fencePartsHeight') && 'error'" @keyup="checkFencePartsForm" label="Výška otvoru" placeholder="mm"></fwb-input>
+                        </div>
+                        <div class="col-span-4 md:col-span-1">
+                          <fwb-button type="button" class="w-full" @click="addFenceParts">Pridať</fwb-button>
+                        </div>
+                      </div>
+
+                      <div>
+                        <div class="mb-2 font-semibold">Plotové dielce</div>
+                        <div class="flex flex-col gap-y-3">
+                          <div v-for="(part, key) in form.fencePartsList" class="grid grid-cols-7 items-center bg-gray-900/30 p-4 rounded-lg">
+                            <div class="col-span-2 text-xl">
+                              <div class="text-xs opacity-75">Počet</div>
+                              <div class="text-base md:text-xl">{{ part.count }}</div>
+                            </div>
+                            <div class="col-span-2 text-xl">
+                              <div class="text-xs opacity-75">Šírka otvoru</div>
+                              <div class="text-base md:text-xl">{{ part.width }}</div>
+                            </div>
+                            <div class="col-span-2 text-xl">
+                              <div class="text-xs opacity-75">Výška otvoru</div>
+                              <div class="text-base md:text-xl">{{ part.height }}</div>
+                            </div>
+                            <div class="text-xl text-end md:text-center">
+                              <button type="button" @click="removeFenceParts(key)" class="hover:text-white transition">
+                                <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 18 6m0 12L6 6"/>
+                                </svg>
+                              </button>
+                            </div>
+                          </div>
+                          <div v-if="!form.fencePartsList.length" class="flex items-center justify-center bg-gray-900/30 p-4 rounded-lg text-sm opacity-75" :class="[ (getError('fenceParts') || getError('fencePartsList')) ? 'border border-red-700 text-red-500' : '']">
+                            Zatiaľ neboli pridané žiadne plotové dielce.
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                  <div class="shadow rounded-lg overflow-hidden">
+                    <div class="bg-gray-800 px-6 py-5 cursor-pointer user-select-none">
                       <div class="flex items-center">
                         Motor
-                        <div class="ms-auto text-xl">
-                          <span v-if="form.motor"><i class="fa-solid fa-toggle-on text-blue-500"></i></span>
-                          <span v-else><i class="fa-solid fa-toggle-off text-gray-400"></i></span>
-                        </div>
+                        <fwb-toggle v-model="form.motor" class="ms-auto"/>
                       </div>
                     </div>
                   </div>
@@ -417,62 +511,70 @@ const prevButton = () => {
               <panel-item>
 
                 <div class="flex flex-col gap-6 md:p-6">
-                  <div class="bg-gray-600 rounded-xl text-gray-300">
-                    <div class="p-6 grid grid-cols-12 items-center">
-                      <div class="col-span-12 sm:col-span-8">
-                        <div class="grid grid-cols-12 gap-x-2 gap-y-1 text-sm">
-                          <div class="col-span-12 text-lg font-semibold mb-2">Brána</div>
 
-                          <div class="col-span-4">Typ brány</div>
-                          <div class="col-span-8 font-semibold">{{ form.gate }}</div>
+                  <div class="bg-gray-700/50 p-4 rounded-xl">
+                    <div class="bg-gray-700/50 shadow-md rounded-xl text-gray-300 mb-6">
+                      <div class="p-6 grid grid-cols-12 items-center">
+                        <div class="col-span-12 sm:col-span-8">
+                          <div class="grid grid-cols-12 gap-x-2 gap-y-1 text-sm">
+                            <div class="col-span-12 text-lg font-semibold mb-2">Brána</div>
 
-                          <div class="col-span-4">Vzor</div>
-                          <div class="col-span-8 font-semibold">{{ form.styleGate }}</div>
+                            <div class="col-span-4">Typ brány</div>
+                            <div class="col-span-8 font-semibold">{{ form.gate }}</div>
 
-                          <div class="col-span-4">Širka otvoru</div>
-                          <div class="col-span-8 font-semibold">{{ form.widthGate }}</div>
+                            <div class="col-span-4">Vzor</div>
+                            <div class="col-span-8 font-semibold">{{ form.styleGate }}</div>
 
-                          <div class="col-span-4">Výška otvoru</div>
-                          <div class="col-span-8 font-semibold">{{ form.heightGate }}</div>
+                            <div class="col-span-4">Širka otvoru</div>
+                            <div class="col-span-8 font-semibold">{{ form.widthGate }}</div>
+
+                            <div class="col-span-4">Výška otvoru</div>
+                            <div class="col-span-8 font-semibold">{{ form.heightGate }}</div>
+
+                          </div>
+                        </div>
+                        <div class="col-span-12 sm:col-span-4 pe-9 pb-9 ps-6 pt-6">
+                          <div class="relative">
+                            <img src="/img/gate-kridlova_240x135.png" class="w-full" alt="Gate">
+                            <div class="absolute top-1/2 w-44 text-center left-full -translate-y-1/2 -translate-x-1/2 rotate-90 text-sm ms-6 font-bold">
+                              <i class="fa-solid fa-arrows-left-right me-1"></i> {{ form.widthGate }}
+                            </div>
+                            <div class="absolute top-full inset-x-0 text-center text-sm mt-3 font-bold">
+                              <i class="fa-solid fa-arrows-left-right me-1"></i> {{ form.heightGate }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 items-stretch gap-6" v-if="form.entryGate || form.montage || form.fenceParts || form.motor">
+                      <div v-if="form.entryGate" class="bg-gray-700/50 shadow-md rounded-xl text-gray-300">
+                        <div class="p-4 font-semibold text-center">Vstupná bránka</div>
+                        <div class="grid grid-cols-2 gap-x-2 gap-y-1 text-sm px-1 pb-4">
+
+                          <div class="text-end">Šírka</div>
+                          <div class="text-start font-semibold truncate">{{ form.widthEntryGate }}</div>
+
+                          <div class="text-end">Výška</div>
+                          <div class="text-start font-semibold truncate">{{ form.heightEntryGate }}</div>
 
                         </div>
                       </div>
-                      <div class="col-span-12 sm:col-span-4 pe-9 pb-9 ps-6 pt-6">
-                        <div class="relative">
-                          <img src="/img/gate-kridlova_240x135.png" class="w-full" alt="Gate">
-                          <div class="absolute top-1/2 w-44 text-center left-full -translate-y-1/2 -translate-x-1/2 rotate-90 text-sm ms-6 font-bold">
-                            <i class="fa-solid fa-arrows-left-right me-1"></i> {{ form.widthGate }}
-                          </div>
-                          <div class="absolute top-full inset-x-0 text-center text-sm mt-3 font-bold">
-                            <i class="fa-solid fa-arrows-left-right me-1"></i> {{ form.heightGate }}
-                          </div>
+                      <div v-if="form.montage" class="bg-gray-700/50 shadow-md rounded-xl text-gray-300">
+                        <div class="p-4 pb-2 font-semibold text-center">Montáž</div>
+                        <div class="px-4 text-xs text-center mb-2">Lokalita</div>
+                        <div class="px-4 pb-3 text-center truncate"><i class="fa-solid fa-location-dot me-1"></i> {{ form.montagePlace }}</div>
+                      </div>
+                      <div v-if="form.fenceParts" class="bg-gray-700/50 shadow-md rounded-xl text-gray-300">
+                        <div class="p-4 pb-2 font-semibold text-center">Plotové dielce</div>
+                        <div class="p-4 pt-2 text-center text-2xl">
+                          {{ form.fencePartsList.reduce((accum, current) => accum + current.count, 0) }}
                         </div>
                       </div>
-                    </div>
-                  </div>
-
-                  <div class="grid grid-cols-1 md:grid-cols-3 items-stretch gap-6" v-if="form.entryGate || form.montage || form.motor">
-                    <div v-if="form.entryGate" class="bg-gray-600 rounded-xl text-gray-300">
-                      <div class="p-4 font-semibold text-center">Vstupná bránka</div>
-                      <div class="grid grid-cols-2 gap-x-2 gap-y-1 text-sm px-1 pb-4">
-
-                        <div class="text-end">Šírka</div>
-                        <div class="text-start font-semibold">{{ form.widthEntryGate }}</div>
-
-                        <div class="text-end">Výška</div>
-                        <div class="text-start font-semibold">{{ form.heightEntryGate }}</div>
-
-                      </div>
-                    </div>
-                    <div v-if="form.montage" class="bg-gray-600 rounded-xl text-gray-300">
-                      <div class="p-4 pb-2 font-semibold text-center">Montáž</div>
-                      <div class="px-4 text-xs text-center mb-2">Lokalita</div>
-                      <div class="px-4 pb-3 text-center"><i class="fa-solid fa-location-dot me-1"></i> {{ form.montagePlace }}</div>
-                    </div>
-                    <div v-if="form.motor" class="bg-gray-600 rounded-xl text-gray-300">
-                      <div class="p-4 pb-2 font-semibold text-center">Motor</div>
-                      <div class="p-4 pt-2 text-center">
-                        <i class="fa-solid fa-plug fa-2xl"></i>
+                      <div v-if="form.motor" class="bg-gray-700/50 shadow-md rounded-xl text-gray-300">
+                        <div class="p-4 pb-2 font-semibold text-center">Motor</div>
+                        <div class="p-4 pt-2 text-center">
+                          <i class="fa-solid fa-plug fa-2xl"></i>
+                        </div>
                       </div>
                     </div>
                   </div>

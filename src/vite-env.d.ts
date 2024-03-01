@@ -14,8 +14,16 @@ interface Offer {
     heightEntryGate: string;
     montage: boolean;
     montagePlace: string;
+    fenceParts: boolean;
+    fencePartsList: FenceParts[];
     motor: boolean;
     msg: string;
+}
+
+interface FenceParts {
+    count: number;
+    width: string;
+    height: string;
 }
 
 interface Contact {

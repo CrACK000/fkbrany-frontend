@@ -55,7 +55,12 @@ const sendForm = () => {
     formFiles.append('pictures', form.value.pictures[i]);
   }
 
-  formFiles.append('data', JSON.stringify(form.value));
+  formFiles.append('name', form.value.name)
+  formFiles.append('email', form.value.email)
+  formFiles.append('mobile', form.value.mobile)
+  formFiles.append('widthGate', form.value.widthGate)
+  formFiles.append('heightGate', form.value.heightGate)
+  formFiles.append('msg', form.value.msg)
 
   axios.post(`${import.meta.env.VITE_BACKEND}/create-offer-renovation`, formFiles, { withCredentials: true })
     .then(response => {
