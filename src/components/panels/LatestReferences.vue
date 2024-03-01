@@ -1,15 +1,15 @@
 <script setup lang='ts'>
-import { ref, onMounted } from 'vue';
+import {ref, onBeforeMount} from 'vue';
 import references from "@/plugins/references";
 import SkeletonLatestReferences from "@/components/skeleton/references/SkeletonLatestReferences.vue";
-import ImageLoading from "@/components/app/ImageLoading.vue";
+import ImageLoading from "@/components/ImageLoading.vue";
 import LatestReferencesNoGallery from "@/components/references/LatestReferencesNoGallery.vue";
 
 const length = ref(6);
 const references_list = ref<Reference[]>(references.data.references.slice(0,length.value));
 const backend = ref(import.meta.env.VITE_BACKEND);
 
-onMounted(async () => {
+onBeforeMount(async () => {
   if (!references_list.value.length) {
     await references.all()
     references_list.value = references.data.references.slice(0,length.value)
@@ -53,7 +53,7 @@ onMounted(async () => {
             <latest-references-no-gallery v-else />
 
             <div class="absolute inset-0 lg:opacity-0 lg:group-hover:opacity-100 lg:scale-100 lg:group-hover:scale-110 transition">
-              <div class="text-gray-200 line-clamp-2 bg-gray-700/30 backdrop-blur-lg shadow-xl p-3">
+              <div class="text-gray-200 line-clamp-2 bg-gray-700/30 backdrop-blur-lg shadow-xl p-3 truncate">
                 {{reference.title}}
               </div>
             </div>

@@ -5,6 +5,7 @@ import {inject, ref} from "vue";
 import router from "@/router";
 import {useMeta} from "vue-meta";
 import Header from "@/components/Header.vue";
+import Footer from "@/views/layout/Footer.vue";
 
 useMeta({ title: "Login" })
 
@@ -30,8 +31,8 @@ const login = async () => {
   await axios.post(`${import.meta.env.VITE_BACKEND}/login`, form.value, { withCredentials: true })
     .then(response => {
       if (response.data.success) {
-        auth.loggedIn = response.data.loggedIn
-        auth.userData = response.data.user
+        auth.loggedIn.value = response.data.loggedIn
+        auth.userData.value = response.data.user
         router.push({ name: 'dashboard' })
       } else {
         error.value = true;
@@ -89,5 +90,10 @@ const login = async () => {
         </svg> späť na web
       </button>
     </form>
+
+    <div class="fixed bottom-0 -inset-x-1/2">
+      <Footer/>
+    </div>
+
   </Header>
 </template>

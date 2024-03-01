@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {type PropType, ref} from "vue";
-import ImageLoading from "@/components/app/ImageLoading.vue";
+import ImageLoading from "@/components/ImageLoading.vue";
 import ReferenceNoGallery from "@/components/references/ReferenceNoGallery.vue";
 import SkeletonReferences from "@/components/skeleton/references/SkeletonReferences.vue";
 

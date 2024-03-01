@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import {useMeta} from "vue-meta";
 import {FwbButton} from "flowbite-vue";
-import {computed, onMounted, ref} from "vue";
+import {computed, onBeforeMount, ref} from "vue";
 import references from "@/plugins/references";
 import {timeSince} from "@/plugins/dates";
-import ImageLoading from "@/components/app/ImageLoading.vue";
+import ImageLoading from "@/components/ImageLoading.vue";
 import SkeletonLoadingImagesAuthReferences from "@/components/skeleton/auth/SkeletonLoadingImagesAuthReferences.vue";
 import ReferenceNoGallery from "@/components/references/ReferenceNoGallery.vue";
 import SkeletonAuthReferences from "@/components/skeleton/auth/SkeletonAuthReferences.vue";
@@ -26,7 +26,7 @@ const totalPageCount = computed(() => {
   return Math.ceil(references_list.value.length / pageSize.value);
 })
 
-onMounted(async () => {
+onBeforeMount(async () => {
   if (!references_list.value.length) {
     await references.all()
     references_list.value = references.data.references

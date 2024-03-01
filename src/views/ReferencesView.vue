@@ -1,8 +1,7 @@
 <script setup lang='ts'>
-import { ref, onMounted, computed } from 'vue';
+import {ref, computed, onBeforeMount} from 'vue';
 import {useMeta} from 'vue-meta';
 import references from "@/plugins/references";
-import Spinner from "@/components/Spinner.vue";
 import Footer from "@/views/layout/Footer.vue";
 import SkeletonReferences from "@/components/skeleton/references/SkeletonReferences.vue";
 import ReferencesGrid from "@/components/references/ReferencesGrid.vue";
@@ -23,7 +22,7 @@ const referencesLoaded = computed(() =>
   references_list.value.slice(0, length.value)
 );
 
-onMounted(async () => {
+onBeforeMount(async () => {
   if (!references_list.value.length) {
     await references.all()
     references_list.value = references.data.references

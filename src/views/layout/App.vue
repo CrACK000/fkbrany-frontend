@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import NavBar from "@/views/layout/NavBar.vue";
-import {inject, onMounted} from "vue";
+import {inject, onBeforeMount} from "vue";
 import LoadingScreen from "@/components/LoadingScreen.vue";
 import references from "@/plugins/references";
 
 const auth = inject<any>('auth')
 const loading = auth.loading
 
-onMounted(async () => {
+onBeforeMount(async () => {
   await references.all()
 });
 </script>

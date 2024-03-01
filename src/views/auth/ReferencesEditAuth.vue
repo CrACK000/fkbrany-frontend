@@ -1,12 +1,11 @@
 <script setup lang="ts" xmlns="http://www.w3.org/1999/html">
 import {useMeta} from "vue-meta";
 import {FwbBadge, FwbButton, FwbInput, FwbSpinner, FwbTextarea} from "flowbite-vue";
-import {onMounted, ref} from "vue";
+import {onBeforeMount, ref} from "vue";
 import axios from "axios";
 import references from "@/plugins/references";
 import {useRoute} from "vue-router";
-import ImageLoading from "@/components/app/ImageLoading.vue";
-import Spinner from "@/components/Spinner.vue";
+import ImageLoading from "@/components/ImageLoading.vue";
 import SkeletonAuthReferenceEditGalleryLoadingImage from "@/components/skeleton/auth/SkeletonGalleryLoadingImage.vue";
 import PanelForm from "@/components/PanelForm.vue";
 import PanelItem from "@/components/PanelItem.vue";
@@ -286,7 +285,7 @@ function getError(search: any) {
 
 }
 
-onMounted(async () => {
+onBeforeMount(async () => {
 
   await references.view(_id.value)
 
@@ -318,7 +317,7 @@ onMounted(async () => {
           Upraviť referenciu <span class="font-medium text-gray-300">{{ reference.title }}</span>
         </div>
         <div v-if="references.data.referenceLoading" class="ms-auto">
-          <Spinner/>
+          <fwb-spinner size="6"/>
         </div>
       </div>
 
@@ -326,10 +325,10 @@ onMounted(async () => {
     <panel-item>
 
       <div class="flex flex-col gap-y-4" :class="{'opacity-40 block-screen': references.data.referenceLoading }">
-        <fwb-input v-model="form.title" :disabled="success" :validation-status="getError('title') && 'error'" type="text" label="Názov referencie" class="max-w-lg">
+        <fwb-input v-model="form.title" :validation-status="getError('title') && 'error'" type="text" label="Názov referencie" class="max-w-lg">
           <template #validationMessage>{{ getError('title') }}</template>
         </fwb-input>
-        <fwb-textarea v-model="form.description" :disabled="success" label="Popis" class="max-w-lg" />
+        <fwb-textarea v-model="form.description" label="Popis" class="max-w-lg" />
       </div>
 
     </panel-item>

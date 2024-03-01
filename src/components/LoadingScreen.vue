@@ -1,16 +1,16 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import Spinner from "@/components/Spinner.vue";
 import Header from "@/components/Header.vue";
+import {FwbSpinner} from "flowbite-vue";
 
 export default defineComponent({
   name: "LoadingScreen",
-  components: {Header, Spinner}
+  components: {FwbSpinner, Header}
 })
 </script>
 
 <template>
   <Header>
-    <Spinner :width=12 :height=12 class="mx-auto my-auto" />
+    <fwb-spinner size="12" class="mx-auto my-auto"/>
   </Header>
 </template>

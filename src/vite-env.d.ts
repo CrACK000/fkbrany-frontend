@@ -65,11 +65,14 @@ interface User {
   _id: string;
   username: string;
   password?: string;
+  last_login?: string;
 }
 
 interface Auth {
   loggedIn: boolean;
   userData: User | null;
+  loading: boolean;
+  checkAuth: () => Promise<void>;
 }
 
 interface ImportMetaEnv {

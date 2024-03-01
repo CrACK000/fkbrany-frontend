@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {onMounted} from "vue";
+import {onBeforeMount} from "vue";
 import references from "@/plugins/references";
 import Container from "@/components/Container.vue";
 import Footer from "@/views/layout/Footer.vue";
@@ -7,7 +7,7 @@ import ContainerGrid from "@/components/ContainerGrid.vue";
 import AuthGrid from "@/components/AuthGrid.vue";
 import AuthSideMenu from "@/components/app/AuthSideMenu.vue";
 
-onMounted(async () => {
+onBeforeMount(async () => {
   await references.all()
 });
 </script>
@@ -28,7 +28,7 @@ onMounted(async () => {
 
           <template #router>
             <router-view v-slot="{ Component, route }">
-              <keep-alive exclude="ImageLoading,ReferencesCreateAuth,ReferencesEditAuth,Settings">
+              <keep-alive exclude="ImageLoading,ReferencesCreateAuth,ReferencesEditAuth">
                 <component :is="Component" :key="route.path"/>
               </keep-alive>
             </router-view>

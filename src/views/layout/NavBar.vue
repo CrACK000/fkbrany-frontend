@@ -1,5 +1,5 @@
 <script setup lang='ts'>
-import { ref, computed, onMounted } from 'vue';
+import {ref, computed, inject} from 'vue';
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue';
 import NavbarLinks from '@/components/app/NavbarLinks.vue';
 
@@ -27,13 +27,11 @@ const navbarLinks = [
   {
     title: 'Práškové lakovanie',
     to:  { name: 'aalak' }
-  },
-  {
-    title: 'login',
-    to:  { name: 'login' }
   }
 ];
 
+const auth = inject<any>('auth')
+const loggedIn = ref(auth.loggedIn)
 const sidebar = ref(false);
 
 const firstHalfLinks = computed(() => navbarLinks.slice(0, navbarLinks.length / 2));
@@ -47,13 +45,26 @@ const secondHalfLinks = computed(() => navbarLinks.slice(navbarLinks.length / 2)
     <nav class="navbar-scroll">
       <div class="flex justify-between items-center xl:w-11/12 px-3 mx-auto">
 
-        <NavbarLinks :links="firstHalfLinks" class="hidden 2xl:flex items-center gap-4"/>
+        <NavbarLinks :links="firstHalfLinks" class="hidden 2xl:flex items-center justify-start gap-1 w-10/12"/>
 
-        <router-link :to="{ name: 'home' }">
-          <img src="/img/logo_white.svg" id="navbar-logo" class="transition w-[86px] lg:w-[128px] opacity-75 hover:opacity-100 scale-100 hover:scale-105" alt="FKBRANY LOGO">
+        <router-link :to="{ name: 'home' }" class="2xl:w-2/12">
+          <img src="/img/logo_white.svg" id="navbar-logo" class="transition w-[86px] lg:w-[128px] opacity-75 hover:opacity-100 scale-100 hover:scale-105 mx-auto" alt="FKBRANY LOGO">
         </router-link>
 
-        <NavbarLinks :links="secondHalfLinks" class="hidden 2xl:flex items-center gap-4"/>
+        <NavbarLinks :links="secondHalfLinks" class="hidden 2xl:flex items-center justify-end gap-1 w-9/12"/>
+
+        <div class="w-1/12 hidden 2xl:flex">
+          <router-link v-if="!loggedIn" :to="{ name: 'login' }" class="p-3 hover:text-white transition">
+            <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12H4m12 0-4 4m4-4-4-4m3-4h2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2"/>
+            </svg>
+          </router-link>
+          <router-link v-else :to="{ name: 'dashboard' }" class="p-3 hover:text-white transition">
+            <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <path stroke="currentColor" stroke-width="2" d="M7 17v1c0 .6.4 1 1 1h8c.6 0 1-.4 1-1v-1a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3Zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+            </svg>
+          </router-link>
+        </div>
 
         <div class="ms-auto block 2xl:hidden">
           <button @click="sidebar = true" id="navbar-menu" class="bg-gray-800 backdrop-blur p-1.5 text-gray-400 rounded-lg shadow-md">
@@ -100,6 +111,14 @@ const secondHalfLinks = computed(() => navbarLinks.slice(navbarLinks.length / 2)
                           {{ link.title }}
                         </router-link>
                       </div>
+                    </div>
+                    <div class="mt-auto py-8 xxs:py-10 md:py-12 px-2 xs:px-6 md:px-12">
+                      <router-link v-if="!loggedIn" @click="sidebar = false" :to="{ name: 'login' }" class="py-4 px-5 text-black">
+                        Prihlásiť sa
+                      </router-link>
+                      <router-link v-else @click="sidebar = false" :to="{ name: 'dashboard' }" class="py-4 px-5 text-black">
+                        Admin panel
+                      </router-link>
                     </div>
                   </div>
                 </DialogPanel>

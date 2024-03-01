@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import {inject, ref} from "vue";
+import {inject} from "vue";
 import {logout} from "@/plugins/logout";
 
 let isAuthChecked = false;
@@ -14,7 +14,7 @@ const router = createRouter({
       path: '/renovacie-bran', name: 'renovation', component: () => import('@/views/RenovationView.vue')
     },
     {
-      path: '/referencia/:id', name: 'reference', props: true, component: () => import('@/views/ReferenceView.vue')
+      path: '/referencia/:id', name: 'reference', component: () => import('@/views/ReferenceView.vue')
     },
     {
       path: '/nase-referencie', name: 'references', component: () => import('@/views/ReferencesView.vue')
@@ -32,7 +32,13 @@ const router = createRouter({
       path: '/auth/login', name: 'login', component: () => import('@/views/auth/Login.vue'), meta: { isAuth: false }
     },
     {
-      path: '/auth/logout', name: 'logout', component: logout, meta: { isAuth: true }
+      path: '/auth/logout',
+      name: 'logout',
+      component: { template: '' },
+      beforeEnter(to, from, next) {
+        logout()
+        next({ name: 'home' })
+      }
     },
     {
       path: '/auth',
@@ -73,14 +79,13 @@ router.beforeEach(async (to, from, next) => {
     isAuthChecked = true
   }
 
-  const loggedIn = ref(auth.loggedIn)
 
   const isAuth = to.matched.some(record => record.meta.isAuth);
   const isUnAuth = to.matched.some(record => record.meta.isAuth === false);
 
-  if (isAuth && !loggedIn.value) {
+  if (isAuth && !auth.loggedIn.value) {
     next({ name: 'login' });
-  } else if (isUnAuth && loggedIn.value) {
+  } else if (isUnAuth && auth.loggedIn.value) {
     next({ name: 'dashboard' });
   } else {
     next();

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {FwbButton, FwbInput, FwbSpinner} from "flowbite-vue";
-import {onMounted, ref} from "vue";
+import {onBeforeMount, ref} from "vue";
 import axios from "axios";
 import settings from "@/plugins/settings";
 
@@ -102,18 +102,16 @@ function getError(search: any) {
   return emailError ? emailError.message : '';
 }
 
-onMounted(async () => {
-  if (!data.value.receiving_email) {
-    await settings.load()
+onBeforeMount(async () => {
+  await settings.load()
 
-    data.value = settings.data.value
+  data.value = settings.data.value
 
-    Object.keys(form.value).forEach((key) => {
-      if (key in settings.data.value) {
-        form.value[key] = (settings.data.value as any)[key];
-      }
-    })
-  }
+  Object.keys(form.value).forEach((key) => {
+    if (key in settings.data.value) {
+      form.value[key] = (settings.data.value as any)[key];
+    }
+  })
 })
 
 </script>
